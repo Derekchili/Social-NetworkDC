@@ -18,7 +18,7 @@ const thoughtSchema = new Schema({
         required:true,
     },
     reactions:{
-// mind is toast figure out later...
+// mind is toast figure out later Array of nested documents created with the reactionSchema...
     },
 });
 
