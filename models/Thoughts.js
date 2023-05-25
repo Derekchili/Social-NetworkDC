@@ -1,10 +1,9 @@
 const { Schema, model } = require('mongoose');
 const dayJs = require('dayjs');
-
+const reactionSchema = require('./Reaction')
 const thoughtSchema = new Schema({
     thoughtText: {
         type:String,
-        unique:true,
         required:true,
         maxlength:120,
         minlength:1,
@@ -17,11 +16,11 @@ const thoughtSchema = new Schema({
         type:String,
         required:true,
     },
-    reactions:{
-// mind is toast figure out later Array of nested documents created with the reactionSchema...
-    },
+    reactions: [reactionSchema]
+
+// mind is toast figure out later Array of nested documents created with the reactionSchema..have to create a new models file REactions
 });
 
-const Thought = model('Thought', thoughtSchema);
+const Thoughts = model('Thought', thoughtSchema);
 
-module.exports = Thought;
+module.exports = Thoughts;

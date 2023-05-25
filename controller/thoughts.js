@@ -1,51 +1,66 @@
-const { Thoughts, Users } = require('../models');
+const Thought = require('../models/Thoughts');
+const User = require('../models/Users');
 
-module.exports = {
-  // Get all courses
-  getThoughts(req, res) {
-    Thoughts.find()
-      .then((thoughts) => res.json(thoughts))
-      .catch((err) => res.status(500).json(err));
-  },
-  getSingleThoughts(req, res) {
-    Thoughts.findOne({ _id: req.params.thoughtId })
-      .select('-__v')
-      .then((thought) =>
-        !thought
-          ? res.status(404).json({ message: 'No thought with that ID' })
-          : res.json(thought)
-      )
-      .catch((err) => res.status(500).json(err));
-  },
-  createThoughts(req, res) {
-    Thoughts.create(req.body)
-      .then((thought) => res.json(thought))
-      .catch((err) => {
-        console.log(err);
-        return res.status(500).json(err);
-      });
-  },
-  deleteThoughts(req, res) {
-    Thoughts.findOneAndDelete({ _id: req.params.thoughtId })
-      .then((thought) =>
-        !thought
-          ? res.status(404).json({ message: 'No thought with that ID' })
-          : Student.deleteMany({ _id: { $in: thought.students } })
-      )
-      .then(() => res.json({ message: 'thought and students deleted!' }))
-      .catch((err) => res.status(500).json(err));
-  },
-  updateThoughts(req, res) {
-    Thoughts.findOneAndUpdate(
-      { _id: req.params.thoughtId },
-      { $set: req.body },
-      { runValidators: true, new: true }
-    )
-      .then((thought) =>
-        !thought
-          ? res.status(404).json({ message: 'No thought with this id!' })
-          : res.json(thought)
-      )
-      .catch((err) => res.status(500).json(err));
-  },
+// this is a asynchronous function that gets all thoughts
+const getThoughts = async (req,res)=>{
+  try{
+    const data = await Thought.find();
+    return res.json(data);
+  }catch (err){
+    console.log(err);
+    return res.status(500).json({ msg: 'Error', err: err});
+  }
 };
+
+// this is a asynchronous function that gets a thought by id
+const getOneThought = async (req,res)=>{
+  try{
+    const id = req.params.id;
+    const data = await Thought.findById(id);
+    return res.json(data);
+  }catch (err){
+    console.log(err);
+    return res.status(500).json({ msg: 'Error', err: err});
+  }
+};
+
+// this is a asynchronous function that creates a object named newThought and then stores it in the thought var and will push thought into a user by userName.
+const createThought = async (req,res)=>{
+  try{
+    const newThought ={
+      thoughtText: req.body.thoughtText,
+      userName: req.body.userName,
+    };
+    const thought = await Thought.create(newThought);
+    const userRea = await User.findOneAndUpdate({userName:req.body.userName},{$push:{thoughts:thought._id}});
+    return res.json(thought);
+  }catch (err){
+    console.log(err);
+    return res.status(500).json({ msg: 'Error', err: err});
+  }
+};
+
+// this is a asynchronous function that will delete a thought by id
+const deleteThought = async (req,res)=>{
+  try{
+    const id = req.params.id;
+    const data = await Thought.deleteOne({_id: id});
+    return res.json(data);
+  }catch (err){
+    console.log(err);
+    return res.status(500).json({ msg: 'Error', err: err});
+  }
+};
+
+// this is a asynchronous function that will update a thought by id
+const updateThought = async (req,res)=>{
+  try{
+    const id = req.params.id;
+    const data = await Thought.updateOne({_id: id},{$set:{thoughtText:req.body.thoughtText}});
+    return res.json(data);
+  }catch (err){
+    console.log(err);
+    return res.status(500).json({ msg: 'Error', err: err});
+  }
+};
+module.exports = {getThoughts,getOneThought,createThought,deleteThought,updateThought};
