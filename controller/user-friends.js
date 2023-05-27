@@ -1,5 +1,6 @@
 const User = require('../models/Users');
 
+// this is a asynchronous function to update friends to a user
 const updateFriend = async(req,res)=>{
     try{
         const userId = req.params.userId
@@ -14,6 +15,8 @@ return res.json(data);
         return res.status(500).json({ msg: 'Error', err: err});
       }
 };
+
+// this is a asynchronous function to delete a friend from a user
 const deleteFriend = async(req,res)=>{
     try{
         const userId = req.params.userId;

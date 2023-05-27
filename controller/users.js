@@ -1,6 +1,7 @@
 // const { ObjectId } = require("mongoose").Types;
 const User = require('../models/Users');
 
+// this is a asynchronous function to get all users that you have
 const getUsers = async (req, res) =>{
   try{
     const data = await User.find().populate('thoughts').populate('friends');
@@ -11,6 +12,8 @@ const getUsers = async (req, res) =>{
     return res.status(500).json({ msg: 'Error', err: err});
   }
 };
+
+// this is a asynchronous function to get a user by their id
 const getOneUser = async (req,res)=>{
   try{
     const id = req.params.id;
@@ -21,6 +24,8 @@ const getOneUser = async (req,res)=>{
     return res.status(500).json({ msg: 'Error', err: err});
   }
 };
+
+// this is a asynchronous function to create a new user
 const createUser = async (req,res)=>{
   try{
     const newUser = {
@@ -34,6 +39,8 @@ const createUser = async (req,res)=>{
     return res.status(500).json({ msg: 'Error', err: err});
   }
 };
+
+// this is a asynchronous function to delete a user
 const deleteUser = async (req,res)=>{
   try{
     const id = req.params.id;
@@ -44,6 +51,8 @@ const deleteUser = async (req,res)=>{
     return res.status(500).json({ msg: 'Error', err: err});
   }
 };
+
+// this is a asynchronous function to update a user by their id
 const updateUser = async (req,res)=>{
   try{
     const id = req.params.id;

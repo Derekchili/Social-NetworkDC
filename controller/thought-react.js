@@ -5,10 +5,10 @@ const updateReact = async (req,res)=>{
     try{
         const thoughtId = req.params.thoughtId;
         const newReact = {
-            reactBody: req.body.reactBody,
+            reactionBody: req.body.reactionBody,
             userName: req.body.userName,
         };
-        const thought = await Thought.updateOne({_id:thoughtId},{$push:{react:newReact}},{new:true});
+        const thought = await Thought.findOneAndUpdate({_id:thoughtId},{$addToSet:{reactions:newReact}},{new:true, runValidators: true});
         return res.json(thought);
     }catch (err){
         console.log(err);
